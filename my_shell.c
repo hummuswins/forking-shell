@@ -160,7 +160,7 @@ void get_command_line(struct command * cmd)
 int check_children()
 {
         int status, pid, i, j;
-        pid = waitpid(0, &status, WNOHANG) /* TBD: wait for a child without blocking (hanging) */;
+        pid = waitpid(0, &status, WNOHANG)
         if (pid <= 0) return -1;
         for (i = 0; i <= psp; i++)
                 if (process_stack[i].pid == pid) break;
@@ -184,7 +184,7 @@ int readable(char * file_name)
 }
 
 int writable(char * file_name)
-{ // actually, this function is wrong, but it will work for now
+{
         struct stat buf;
         if (stat(file_name, &buf) < 0) return 1;
         return buf.st_mode & S_IWUSR;
@@ -248,12 +248,12 @@ int set_child_io(struct command * cmd, int * in, int * out)
         *in = 0;
         *out = 1;
         if (cmd->ifile)
-                *in = open(cmd->ifile, O_RDONLY) /* TBD: open the cmd.ifile for reading */;
+                *in = open(cmd->ifile, O_RDONLY)
         if (cmd->ofile)
-                *out = open(cmd->ofile, O_CREAT|O_WRONLY|O_TRUNC, 0666) /* TBD: create cmd.ofile for writing */;
+                *out = open(cmd->ofile, O_CREAT|O_WRONLY|O_TRUNC, 0666)
         if (cmd->mode == PIPE)
         {
-                if (pipe(pipes) == -1 /* TBD: create a pipeline in pipes */)
+                if (pipe(pipes) == -1)
                 {
                         fprintf(stderr, "Unable to create pipes\n");
                         return 0;
@@ -297,7 +297,7 @@ int main(int argc, char *argv[], char *envp[])
                         continue;
                 if (!set_child_io(&cmd, &in, &out))
                         continue;
-                if (child_pid = fork() /* TBD: create a new process */)
+                if (child_pid = fork())
                 {
                         // PARENT (shell) work
                         if (cmd.mode == PLAIN)
@@ -312,16 +312,15 @@ int main(int argc, char *argv[], char *envp[])
                                         fprintf(stderr, "[%d] %d\n", psp, child_pid);
                         }
                         if (in != 0)
-                                close(in) /* TBD: close the file descriptor for in */ ;
+                                close(in);
                         if (out != 1)
-                                close(out) /* TBD: close the file descriptor for out */ ;
+                                close(out);
                 }
                 else
                 {
-                        // CHILD work
-                        dup2(in, 0) /* TBD: duplicate the I/O descriptor from in over our stdin */ ;
-                        dup2(out, 1) /* TBD: duplicate the I/O descriptor from out over our stdout */ ;
-                        execv(cmd.full_path, cmd.argv)/* TBD: run program in cmd.full_path in the current process */ ;
+                        dup2(in, 0) ;
+                        dup2(out, 1);
+                        execv(cmd.full_path, cmd.argv);
                         fprintf(stderr, "Unable to run '%s'\n", cmd.full_path);
                         exit(-1);
                 }
