@@ -1,11 +1,9 @@
 CC=gcc
 CFLAGS= -ggdb
-DEFAULT: my_shell times
+DEFAULT: my_shell
 
 my_shell: my_shell.o
 	$(CC) my_shell.o -o my_shell $(CFLAGS)
-time: times.o
-	$(CC) -c times.o -o times $(CFLAGS)
 %.o : %.c
 	$(CC) -c $(CFLAGS) $<
 clean:
