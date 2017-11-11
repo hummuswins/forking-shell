@@ -7,8 +7,6 @@ my_shell: my_shell.o
 %.o : %.c
 	$(CC) -c $(CFLAGS) $<
 clean:
-	/bin/rm my_shell times my_shell.o times.o
+	/bin/rm my_shell times my_shell.o
 strip:
-	strip my_shell times 
-val:
-	valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --track-origins=yes my_shell
+	strip my_shell
